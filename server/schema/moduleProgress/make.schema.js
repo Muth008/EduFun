@@ -1,10 +1,10 @@
 const makeModuleProgressSchema = {
     type: "object",
     properties: {
-        moduleId: { type: "string" },
+        id: { type: "string" },
         answer: { type: "string" },
     },
-    required: ["moduleId"],
+    required: ["id"],
     additionalProperties: false,
 };
 

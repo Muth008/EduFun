@@ -15,9 +15,12 @@ async function getTaskItem(req, res) {
         if (!valid) handleValidationError(ajv);
 
         const taskitem = await taskitemDAO.getTaskItem(reqParams.id);
+
+        if (!taskitem) handleNotFound('taskitem', reqParams.id);
+        
         res.json(taskitem);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

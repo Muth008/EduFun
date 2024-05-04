@@ -1,5 +1,8 @@
+const { handlePrismaError } = require('../utils/dao.util');
+
 class ReviewDAO {
-    
+    type = 'review';
+
     constructor(prisma) {
         this.prisma = prisma;
     }
@@ -11,7 +14,7 @@ class ReviewDAO {
             });
             return reviews;
         } catch (error) {
-            throw new Error(`Failed to list reviews: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -22,7 +25,7 @@ class ReviewDAO {
             });
             return review;
         } catch (error) {
-            throw new Error(`Failed to get review: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, reviewId);
         }
     }
 
@@ -33,7 +36,7 @@ class ReviewDAO {
             });
             return review;
         } catch (error) {
-            throw new Error(`Failed to create review: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -46,7 +49,7 @@ class ReviewDAO {
             });
             return review;
         } catch (error) {
-            throw new Error(`Failed to update review: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, reviewId);
         }
     }
 
@@ -57,7 +60,7 @@ class ReviewDAO {
             });
             return review;
         } catch (error) {
-            throw new Error(`Failed to delete review: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, reviewId);
         }
     }
 }

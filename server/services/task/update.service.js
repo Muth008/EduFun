@@ -17,7 +17,7 @@ async function updateTask(req, res) {
         const task = await taskDAO.updateTask(body.id, body);
         res.json(task);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

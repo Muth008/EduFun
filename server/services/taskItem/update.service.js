@@ -17,7 +17,7 @@ async function updateTaskItem(req, res) {
         const taskitem = await taskitemDAO.updateTaskItem(body.id, body);
         res.json(taskitem);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

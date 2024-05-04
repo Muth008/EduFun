@@ -17,7 +17,7 @@ async function updateScoreboard(req, res) {
         const scoreboard = await scoreboardDAO.updateScoreboard(body.id, body);
         res.json(scoreboard);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

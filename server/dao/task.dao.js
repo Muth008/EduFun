@@ -1,4 +1,7 @@
+const { handlePrismaError } = require('../utils/dao.util');
+
 class TaskDAO {
+    type = 'task';
     
     constructor(prisma) {
         this.prisma = prisma;
@@ -11,7 +14,7 @@ class TaskDAO {
             });
             return tasks;
         } catch (error) {
-            throw new Error(`Failed to find tasks: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -22,7 +25,7 @@ class TaskDAO {
             });
             return task;
         } catch (error) {
-            throw new Error(`Failed to get task: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, taskId);
         }
     }
 
@@ -33,7 +36,7 @@ class TaskDAO {
             });
             return task;
         } catch (error) {
-            throw new Error(`Failed to create task: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -46,7 +49,7 @@ class TaskDAO {
             });
             return task;
         } catch (error) {
-            throw new Error(`Failed to update task: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, taskId);
         }
     }
 
@@ -57,7 +60,7 @@ class TaskDAO {
             });
             return task;
         } catch (error) {
-            throw new Error(`Failed to delete task: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, taskId);
         }
     }
 }

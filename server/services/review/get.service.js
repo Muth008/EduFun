@@ -15,9 +15,12 @@ async function getReview(req, res) {
         if (!valid) handleValidationError(ajv);
 
         const review = await reviewDAO.getReview(reqParams.id);
+
+        if (!review) handleNotFound('review', reqParams.id);
+
         res.json(review);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

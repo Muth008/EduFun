@@ -23,7 +23,10 @@ function uploadFileMiddleware(folder, imageProperty = "image") {
 }
 
 function handleUploadError(err, res) {
-    return res.status(err.status ?? 500).json({ error: `[${err.code}] Failed to upload file` });
+    return res.status(err.status ?? 500).json({
+        code: "fileUploadFailure",
+        message: "There was an error during file upload. It is not possible to upload file."
+    });
 }
 
 module.exports = {

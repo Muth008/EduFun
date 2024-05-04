@@ -7,7 +7,9 @@ addFormats(ajv);
 function handleValidationError(ajv) {
     throw {
         status: 400,
-        message: ajv.errors,
+        code: 'invalidDtoIn',
+        message: 'DtoIn is not valid',
+        validationError: ajv.errors,
     };
 }
 

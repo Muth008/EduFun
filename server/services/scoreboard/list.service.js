@@ -2,6 +2,7 @@ const ScoreboardDAO = require("../../dao/scoreboard.dao");
 const { PrismaClient } = require("@prisma/client");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
 const listScoreboardSchema = require("../../schema/scoreboard/list.schema");
+const { createError } = require("../../utils/error.util");
 
 const prisma = new PrismaClient();
 const scoreboardDAO = new ScoreboardDAO(prisma);
@@ -17,7 +18,7 @@ async function listScoreboards(req, res) {
         const scoreboards = await scoreboardDAO.listScoreboards(body);
         res.json(scoreboards);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...createError('List', 'scoreboard') });
     }
 }
 

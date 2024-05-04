@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 const moduleDAO = new ModuleDAO(prisma);
 const { uploadFileMiddleware, handleUploadError } = require("../file/upload.service");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
+const { createError } = require("../../utils/error.util");
 
 const uploadFile = uploadFileMiddleware("module");
 
@@ -31,7 +32,7 @@ async function createModule(req, res) {
             const module = await moduleDAO.createModule(body);
             res.json(module);
         } catch (err) {
-            res.status(err.status ?? 500).json({ error: err.message });
+            res.status(err.status ?? 500).json({ ...createError('Create', 'module') });
         }
     });
 }

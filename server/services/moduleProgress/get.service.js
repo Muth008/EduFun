@@ -5,7 +5,8 @@ const TaskItemDAO = require("../../dao/taskItem.dao");
 const { PrismaClient } = require("@prisma/client");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
 const getModuleProgressSchema = require("../../schema/moduleProgress/get.schema");
-const { handleModuleErrors, getCurrentScoreboard } = require("./common.service");
+const { getCurrentScoreboard } = require("./common.service");
+const { handleModuleErrors } = require("../../utils/error.util");
 
 const prisma = new PrismaClient();
 const moduleDAO = new ModuleDAO(prisma);
@@ -24,7 +25,7 @@ async function getModuleProgress(req, res) {
 
         // Get the module and handle errors
         const module = await moduleDAO.getModule(reqParams.id);
-        handleModuleErrors(module);
+        handleModuleErrors(module, reqParams.id);
 
         let currentTask = await getCurrentTask(module);
 
@@ -41,7 +42,7 @@ async function getModuleProgress(req, res) {
             taskItemList: taskItemList,
         });
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

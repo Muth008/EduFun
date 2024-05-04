@@ -17,7 +17,7 @@ async function deleteReview(req, res) {
         const review = await reviewDAO.deleteReview(body.id);
         res.json(review);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

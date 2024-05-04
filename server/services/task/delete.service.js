@@ -17,7 +17,7 @@ async function deleteTask(req, res) {
         const task = await taskDAO.deleteTask(body.id);
         res.json(task);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

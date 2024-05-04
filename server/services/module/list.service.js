@@ -2,6 +2,7 @@ const ModuleDAO = require("../../dao/module.dao");
 const { PrismaClient } = require("@prisma/client");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
 const listModuleSchema = require("../../schema/module/list.schema");
+const { createError } = require("../../utils/error.util");
 
 const prisma = new PrismaClient();
 const moduleDAO = new ModuleDAO(prisma);
@@ -17,7 +18,7 @@ async function listModules(req, res) {
         const modules = await moduleDAO.listModules(body);
         res.json(modules);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...createError('List', 'module') });
     }
 }
 

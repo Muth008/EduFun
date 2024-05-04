@@ -1,4 +1,8 @@
+const { handlePrismaError } = require('../utils/dao.util');
+
 class ModuleDAO {
+    type = 'module';
+
     constructor(prisma) {
         this.prisma = prisma;
     }
@@ -15,7 +19,7 @@ class ModuleDAO {
 
             return module;
         } catch (error) {
-            throw new Error(`Failed to get module: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, moduleId);
         }
     }
 
@@ -31,7 +35,7 @@ class ModuleDAO {
 
             return modules;
         } catch (error) {
-            throw new Error(`Failed to list modules: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -48,7 +52,7 @@ class ModuleDAO {
 
             return this.getModule(module.id);
         } catch (error) {
-            throw new Error(`Failed to create module: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -73,7 +77,7 @@ class ModuleDAO {
 
             return this.getModule(module.id);
         } catch (error) {
-            throw new Error(`Failed to update module: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, moduleId);
         }
     }
 
@@ -89,7 +93,7 @@ class ModuleDAO {
 
             return module;
         } catch (error) {
-            throw new Error(`Failed to delete module: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, moduleId);
         }
     }
 

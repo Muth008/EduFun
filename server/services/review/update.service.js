@@ -17,7 +17,7 @@ async function updateReview(req, res) {
         const review = await reviewDAO.updateReview(body.id, body);
         res.json(review);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

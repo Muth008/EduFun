@@ -15,9 +15,12 @@ async function getTask(req, res) {
         if (!valid) handleValidationError(ajv);
 
         const task = await taskDAO.getTask(reqParams.id);
+        
+        if (!task) handleNotFound('task', reqParams.id);
+
         res.json(task);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

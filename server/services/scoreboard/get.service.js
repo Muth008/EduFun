@@ -15,9 +15,12 @@ async function getScoreboard(req, res) {
         if (!valid) handleValidationError(ajv);
 
         const scoreboard = await scoreboardDAO.getScoreboard(reqParams.id);
+
+        if (!scoreboard) handleNotFound('scoreboard', reqParams.id);
+        
         res.json(scoreboard);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

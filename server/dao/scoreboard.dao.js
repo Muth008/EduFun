@@ -1,4 +1,8 @@
+const { handlePrismaError } = require('../utils/dao.util');
+
 class ScoreboardDAO {
+    type = 'scoreboard';
+
     constructor(prisma) {
         this.prisma = prisma;
     }
@@ -22,7 +26,7 @@ class ScoreboardDAO {
 
             return scoreboards;
         } catch (error) {
-            throw new Error(`Failed to list scoreboards: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -33,7 +37,7 @@ class ScoreboardDAO {
             });
             return scoreboard;
         } catch (error) {
-            throw new Error(`Failed to get scoreboard: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, scoreboardId);
         }
     }
 
@@ -44,7 +48,7 @@ class ScoreboardDAO {
             });
             return scoreboard;
         } catch (error) {
-            throw new Error(`Failed to create scoreboard: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error);
         }
     }
 
@@ -57,7 +61,7 @@ class ScoreboardDAO {
             });
             return scoreboard;
         } catch (error) {
-            throw new Error(`Failed to update scoreboard: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, scoreboardId);
         }
     }
 
@@ -68,7 +72,7 @@ class ScoreboardDAO {
             });
             return scoreboard;
         } catch (error) {
-            throw new Error(`Failed to delete scoreboard: ${error.meta?.cause ?? error.meta?.target}`);
+            handlePrismaError(error, this.type, scoreboardId);
         }
     }
 }

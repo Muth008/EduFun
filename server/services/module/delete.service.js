@@ -17,7 +17,7 @@ async function deleteModule(req, res) {
         const module = await moduleDAO.deleteModule(body.id);
         res.json(module);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

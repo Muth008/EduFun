@@ -3,8 +3,9 @@ const TaskItemDAO = require("../../dao/taskItem.dao");
 const ScoreboardDAO = require("../../dao/scoreboard.dao");
 const { PrismaClient } = require("@prisma/client");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
-const { handleModuleErrors, getCurrentScoreboard, handleScoreboardErrors } = require("./common.service");
+const { getCurrentScoreboard } = require("./common.service");
 const makeModuleProgressSchema = require("../../schema/moduleProgress/make.schema");
+const { handleModuleErrors, handleScoreboardErrors } = require("../../utils/error.util");
 
 const prisma = new PrismaClient();
 const moduleDAO = new ModuleDAO(prisma);
@@ -21,12 +22,12 @@ async function makeModuleProgress(req, res) {
         if (!valid) handleValidationError(ajv);
 
         // Get the module and handle errors
-        const module = await moduleDAO.getModule(body.moduleId);
-        handleModuleErrors(module);
+        const module = await moduleDAO.getModule(body.id);
+        handleModuleErrors(module, body.id);
 
         // Get the current status from scoreboard and handle errors
         const scoreboard = await getCurrentScoreboard(module.id);
-        handleScoreboardErrors(scoreboard);
+        handleScoreboardErrors(scoreboard, module.id);
 
         const taskAnswer = await taskItemDAO.listTaskItems({
             taskId: scoreboard.taskId,
@@ -43,7 +44,7 @@ async function makeModuleProgress(req, res) {
 
         res.json(result);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 

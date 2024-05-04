@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 const taskitemDAO = new TaskItemDAO(prisma);
 const { uploadFileMiddleware, handleUploadError } = require("../file/upload.service");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
+const { createError } = require("../../utils/error.util");
 
 const uploadFile = uploadFileMiddleware("taskItem", "content");
 
@@ -30,7 +31,7 @@ async function createTaskItem(req, res) {
             const taskitem = await taskitemDAO.createTaskItem(body);
             res.json(taskitem);
         } catch (err) {
-            res.status(err.status ?? 500).json({ error: err.message });
+            res.status(err.status ?? 500).json({ ...createError('Create', 'taskItem') });
         }
     });
 }

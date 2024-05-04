@@ -17,7 +17,7 @@ async function deleteScoreboard(req, res) {
         const scoreboard = await scoreboardDAO.deleteScoreboard(body.id);
         res.json(scoreboard);
     } catch (err) {
-        res.status(err.status ?? 500).json({ error: err.message });
+        res.status(err.status ?? 500).json({ ...err });
     }
 }
 
