@@ -6,8 +6,8 @@ const taskitemDAO = new TaskItemDAO(prisma);
 const { uploadFileMiddleware, handleUploadError } = require("../file/upload.service");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
 const { createError } = require("../../utils/error.util");
-
-const uploadFile = uploadFileMiddleware("taskItem", "content");
+const fileFolder = "taskItem";
+const uploadFile = uploadFileMiddleware(fileFolder, "content");
 
 async function createTaskItem(req, res) {
 
@@ -26,6 +26,8 @@ async function createTaskItem(req, res) {
             if (req.file) {
                 // Update the body with name of uploaded file
                 body.content = req.file.originalname;
+                // Update the body with uploaded file path
+                body.image = `/${fileFolder}/uploads/${req.file.originalname}`;
             }
 
             const taskitem = await taskitemDAO.createTaskItem(body);

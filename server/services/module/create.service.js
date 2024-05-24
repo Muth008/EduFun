@@ -6,8 +6,8 @@ const moduleDAO = new ModuleDAO(prisma);
 const { uploadFileMiddleware, handleUploadError } = require("../file/upload.service");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
 const { createError } = require("../../utils/error.util");
-
-const uploadFile = uploadFileMiddleware("module");
+const fileFolder = "module";
+const uploadFile = uploadFileMiddleware(fileFolder);
 
 async function createModule(req, res) {
 
@@ -25,8 +25,8 @@ async function createModule(req, res) {
             if (!valid) handleValidationError(ajv);
 
             if (req.file) {
-                // Update the body with name of uploaded file
-                body.image = req.file.originalname;
+                // Update the body with uploaded file path
+                body.image = `/${fileFolder}/uploads/${req.file.originalname}`;
             }
 
             const module = await moduleDAO.createModule(body);
