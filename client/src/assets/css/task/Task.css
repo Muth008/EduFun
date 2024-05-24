@@ -1,0 +1,12 @@
+.task-card {
+    width: 18rem;
+}
+
+.task-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-buttons .btn {
+    width: 100%;
+}

@@ -1,0 +1,17 @@
+.module-card {
+    width: 18rem;
+}
+
+.module-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.module-buttons .btn {
+    width: 120px;
+}
+
+.module-card-img {
+    height: 200px;
+    object-fit: cover;
+}

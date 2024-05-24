@@ -1,0 +1,13 @@
+.task-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    padding: 0 25px 0 25px;
+}
+
+@media (max-width: 500px) {
+    .task-list {
+        justify-content: center;
+        padding: 0 5px 0 5px;
+    }
+}
