@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Modal, Button, Container, Row, Col, Card, ListGroup } from 'react-bootstrap';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { MultiBackend } from 'react-dnd-multi-backend';
 import { HTML5DragTransition, TouchTransition } from 'react-dnd-multi-backend';
+import { TasksContext } from '../../context/TasksContext';
 
 const ItemTypes = {
   TASK: 'task'
@@ -57,7 +58,7 @@ const Task = ({ task, listType, index, moveTask }) => {
 
   return (
     <ListGroup.Item ref={node => drag(drop(node))} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      {task}
+      <div>{task.name}</div>
     </ListGroup.Item>
   );
 };
@@ -90,33 +91,38 @@ const TaskList = ({ tasks, listType, moveTask }) => {
   );
 };
 
-const ModuleTasksModal = ({ show, handleClose }) => {
-  const [availableTasks, setAvailableTasks] = useState({
-    new: ['Pythagorean theorem - basics II'],
-    used: ['Basic logarithm 1', 'Basic logarithm 2', 'Basic logarithm 3']
-  });
+const ModuleTasksModal = ({ show, handleClose, tasks, setTasks }) => {
 
-  const [selectedTasks, setSelectedTasks] = useState(['Pythagorean theorem - basics']);
+  const { taskList } = useContext(TasksContext);
+  const [availableTasks, setAvailableTasks] = useState({ new: [], used: [] });
+  const [selectedTasks, setSelectedTasks] = useState([]);
 
   const moveTask = (fromListType, toListType, fromIndex, toIndex) => {
     const fromList = fromListType === 'selected' ? selectedTasks : availableTasks[fromListType];
     const toList = toListType === 'selected' ? selectedTasks : availableTasks[toListType];
-
     const task = fromList.splice(fromIndex, 1)[0];
-    toList.splice(toIndex, 0, task);
 
+    toList.splice(toIndex, 0, task);
+    toList.forEach((task, index) => {
+      task.order = index + 1;
+    });
+  
     setAvailableTasks({ ...availableTasks });
     setSelectedTasks([...selectedTasks]);
   };
 
   const handleSave = () => {
-    const data = {
-      availableTasks,
-      selectedTasks
-    };
-    console.log(data);
+    setTasks(selectedTasks.sort((a, b) => a.order - b.order));
     handleClose();
   };
+
+  useEffect(() => {
+    setSelectedTasks([...tasks]);
+    setAvailableTasks({
+      new: [...taskList.filter(task => !tasks.some(selectedTask => selectedTask.id === task.id))],
+      used: []
+    });
+  }, [tasks, taskList]);
 
   return (
     <Modal show={show} onHide={handleClose} size="lg">

@@ -6,10 +6,10 @@ function Dashboard() {
 
     return (
         <>
-            <HeaderPanel text="Module" />
+            <HeaderPanel type="module" />
             <ModuleList />
             <hr />
-            <HeaderPanel text="Tasks" />
+            <HeaderPanel type="task" />
             <TaskList />
         </>
     );
