@@ -9,9 +9,6 @@ const deleteTask = require("../services/task/delete.service");
 
 const router = express.Router();
 
-// Serve static files from the "uploads" directory
-router.use("/uploads", express.static(path.join(__dirname, "../uploads/task")));
-
 router.get("/list", async (req, res) => {
     await listTasks(req, res);
 });
