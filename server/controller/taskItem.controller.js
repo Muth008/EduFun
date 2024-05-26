@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 
 const listTaskItems = require("../services/taskitem/list.service");
 const getTaskItem = require("../services/taskitem/get.service");
@@ -7,6 +8,9 @@ const updateTaskItem = require("../services/taskitem/update.service");
 const deleteTaskItem = require("../services/taskitem/delete.service");
 
 const router = express.Router();
+
+// Serve static files from the "uploads" directory
+router.use("/uploads", express.static(path.join(__dirname, "../uploads/taskItem")));
 
 router.get("/list", async (req, res) => {
     await listTaskItems(req, res);

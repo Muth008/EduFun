@@ -24,10 +24,8 @@ async function createTaskItem(req, res) {
             if (!valid) handleValidationError(ajv);
 
             if (req.file) {
-                // Update the body with name of uploaded file
-                body.content = req.file.originalname;
                 // Update the body with uploaded file path
-                body.image = `/${fileFolder}/uploads/${req.file.originalname}`;
+                body.content = `/${fileFolder}/uploads/${req.file.originalname}`;
             }
 
             const taskitem = await taskitemDAO.createTaskItem(body);
