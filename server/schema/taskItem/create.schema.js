@@ -9,8 +9,9 @@ const createTaskItemSchema = {
         },
         content: { type: "string" },
         contentType: { type: "string", enum: ["text", "image"] },
+        order: { type: "integer" },
     },
-    required: ["name", "taskId", "type", "content", "contentType"],
+    required: ["name", "taskId", "type", "content", "contentType", "order"],
     additionalProperties: false,
 };
 

@@ -45,6 +45,7 @@ model TaskItem {
   type          String
   content       String
   contentType   String
+  order         Int
 }
 
 model Scoreboard {
