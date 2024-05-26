@@ -17,7 +17,7 @@ async function createReview(req, res) {
         const review = await reviewDAO.createReview(body);
         res.json(review);
     } catch (err) {
-        res.status(err.status ?? 500).json({ ...createError('Create', 'review') });
+        res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('Create', 'review') });
     }
 }
 

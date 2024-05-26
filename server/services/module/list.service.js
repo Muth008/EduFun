@@ -18,7 +18,7 @@ async function listModules(req, res) {
         const modules = await moduleDAO.listModules(body);
         res.json(modules);
     } catch (err) {
-        res.status(err.status ?? 500).json({ ...createError('List', 'module') });
+        res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('List', 'module') });
     }
 }
 

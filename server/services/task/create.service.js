@@ -17,7 +17,7 @@ async function createTask(req, res) {
         const task = await taskDAO.createTask(body);
         res.json(task);
     } catch (err) {
-        res.status(err.status ?? 500).json({ ...createError('Create', 'task') });
+        res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('Create', 'task') });
     }
 }
 

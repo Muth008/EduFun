@@ -18,7 +18,7 @@ async function listReviews(req, res) {
         const reviews = await reviewDAO.listReviews(body);
         res.json(reviews);
     } catch (err) {
-        res.status(err.status ?? 500).json({ ...createError('List', 'review') });
+        res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('List', 'review') });
     }
 }
 

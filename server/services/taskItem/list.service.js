@@ -18,7 +18,7 @@ async function listTaskItems(req, res) {
         const taskitems = await taskitemDAO.listTaskItems(body);
         res.json(taskitems);
     } catch (err) {
-        res.status(err.status ?? 500).json({ ...createError('List', 'taskItem') });
+        res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('List', 'taskItem') });
     }
 }
 

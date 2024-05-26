@@ -17,7 +17,7 @@ async function createScoreboard(req, res) {
         const scoreboard = await scoreboardDAO.createScoreboard(body);
         res.json(scoreboard);
     } catch (err) {
-        res.status(err.status ?? 500).json({ ...createError('Create', 'scoreboard') });
+        res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('Create', 'scoreboard') });
     }
 }
 

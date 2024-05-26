@@ -33,7 +33,8 @@ async function createTaskItem(req, res) {
             const taskitem = await taskitemDAO.createTaskItem(body);
             res.json(taskitem);
         } catch (err) {
-            res.status(err.status ?? 500).json({ ...createError('Create', 'taskItem') });
+            console.log(err);
+            res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('Create', 'taskItem') });
         }
     });
 }

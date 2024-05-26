@@ -32,7 +32,7 @@ async function createModule(req, res) {
             const module = await moduleDAO.createModule(body);
             res.json(module);
         } catch (err) {
-            res.status(err.status ?? 500).json({ ...createError('Create', 'module') });
+            res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('Create', 'module') });
         }
     });
 }

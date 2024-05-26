@@ -18,7 +18,7 @@ async function listScoreboards(req, res) {
         const scoreboards = await scoreboardDAO.listScoreboards(body);
         res.json(scoreboards);
     } catch (err) {
-        res.status(err.status ?? 500).json({ ...createError('List', 'scoreboard') });
+        res.status(err.status ?? 500).json(err.status == 400 ? {...err} :{ ...createError('List', 'scoreboard') });
     }
 }
 
