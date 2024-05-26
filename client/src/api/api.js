@@ -2,8 +2,12 @@ const fetchData = async (url, method = "GET", body = null) => {
     try {
         const options = { method };
         if (body) {
-            options.headers = { 'Content-Type': 'application/json' };
-            options.body = JSON.stringify(body);
+            if (body instanceof FormData) {
+                options.body = body;
+            } else {
+                options.headers = { 'Content-Type': 'application/json' };
+                options.body = JSON.stringify(body);
+            }
         }
         const response = await fetch(url, options);
         const data = await response.json();
@@ -25,6 +29,12 @@ export const deleteModule = (module) => fetchData(`/api/module`, "DELETE", modul
 
 export const getTasks = () => fetchData(`/api/task/list`);
 export const getTask = (id) => fetchData(`/api/task/${id}`);
-export const createTask = (task) => fetchData(`/api/task/create`, "POST", task);
-export const updateTask = (task) => fetchData(`/api/task/update/${task.id}`, "PUT", task);
-export const deleteTask = (task) => fetchData(`/api/task/delete/${task.id}`, "DELETE");
+export const createTask = (task) => fetchData(`/api/task`, "POST", task);
+export const updateTask = (task) => fetchData(`/api/task`, "PUT", task);
+export const deleteTask = (task) => fetchData(`/api/task`, "DELETE", task);
+
+export const getTasksItems = () => fetchData(`/api/taskItem/list`);
+export const getTaskItem = (id) => fetchData(`/api/taskItem/${id}`);
+export const createTaskItem = (taskItem) => fetchData(`/api/taskItem`, "POST", taskItem);
+export const updateTaskItem = (taskItem) => fetchData(`/api/taskItem`, "PUT", taskItem);
+export const deleteTaskItem = (taskItem) => fetchData(`/api/taskItem`, "DELETE", taskItem);

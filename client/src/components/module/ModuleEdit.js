@@ -19,15 +19,11 @@ function ModuleEdit() {
     const { taskList } = useContext(TasksContext);
     const { id } = useParams();
 
-    const emptyModule = {
-        name: "",
-        description: "",
-        active: false,
-        tasks: [],
-    };
+    const emptyModule = { name: "", description: "", active: false, tasks: [] };
 
     const [activeModule, setActiveModule] = useState(emptyModule);
     const [updatedTasks, setUpdatedTasks] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -42,14 +38,14 @@ function ModuleEdit() {
     
         const handleRequest = moduleData.id ? handlerMap.handleUpdate : handlerMap.handleCreate;
     
-        if (activeModule.image) {
+        if (selectedFile) {
             const reader = new FileReader();
             reader.onloadend = async () => {
                 moduleData.image = reader.result;
                 const response = await handleRequest(moduleData);
                 handleResponse(response);
             };
-            reader.readAsDataURL(activeModule.image);
+            reader.readAsDataURL(selectedFile);
         } else {
             const response = await handleRequest(moduleData);
             handleResponse(response);
@@ -57,13 +53,11 @@ function ModuleEdit() {
     };
     
     const handleResponse = (response) => {
-        console.log(response);
-        if (response.state === 'error') {
-            console.error(response.error);
-        } else {
-            console.log(response.data);
+        if (response.state === "success") {
+            navigate("/");
         }
     };
+    
     const handleCancel = () => {
         navigate('/');
     };
@@ -110,7 +104,7 @@ function ModuleEdit() {
                     <Row>
                         <Col lg={6}>
                             <Card className="mb-3">
-                                <Card.Header>Create new module</Card.Header>
+                                <Card.Header>{activeModule?.id ? 'Update' : 'Create'} module</Card.Header>
                                 <Card.Body>
                                     <Form.Group controlId="moduleName">
                                         <Form.Label>Name</Form.Label>
@@ -133,16 +127,16 @@ function ModuleEdit() {
                                     </Form.Group>
                                     <Form.Group controlId="moduleImage">
                                         <Form.Label>Image</Form.Label>
-                                        {/* {activeModule.image && 
+                                        {activeModule.image && 
                                             <div className="image-container">
                                                 <img className="image-preview" src={activeModule.image} alt="module" />
-                                                <div className="image-name">{activeModule.image?.split("/").pop()}</div>
+                                                <div className="image-name">image</div>
                                             </div>
-                                        } */}
+                                        }
                                         <Form.Control
                                             type="file"
                                             accept="image/*"
-                                            onChange={e => setActiveModule({ ...activeModule, image: e.target.files[0] })}
+                                            onChange={e => setSelectedFile(e.target.files[0])}
                                         />
                                     </Form.Group>
                                     <Form.Group controlId="moduleActive">
@@ -174,11 +168,12 @@ function ModuleEdit() {
                                         {activeModule?.tasks.map((task) => (
                                             <ListGroup.Item key={task.id}>
                                                 <Row>
-                                                    <Col>
+                                                    <Col xs={2}>Order {task.order}</Col>
+                                                    <Col xs={6}>
                                                         <strong>{task.name}</strong>
                                                         <p>{task.description}</p>
                                                     </Col>
-                                                    <Col xs="auto">
+                                                    <Col xs={4} className="text-right">
                                                         <Button
                                                             variant="danger"
                                                             onClick={() => handleTaskDelete(task.id)}
