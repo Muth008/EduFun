@@ -40,7 +40,7 @@ model ModuleTask {
 
 model TaskItem {
   id            String   @id @default(cuid()) @map("_id")
-  name          String   @unique
+  name          String
   taskId        String   @map("_task")
   type          String
   content       String
