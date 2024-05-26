@@ -84,9 +84,10 @@ function getModuleTime(start, end) {
 
     // Convert time difference from milliseconds to hours and seconds
     const hours = Math.floor(diffInMilliseconds / 1000 / 60 / 60);
+    const minutes = Math.floor((diffInMilliseconds / 1000 / 60) % 60);
     const seconds = Math.floor((diffInMilliseconds / 1000) % 60);
 
-    return { hours, seconds };
+    return { hours, minutes, seconds };
 }
 
 function isAnswerCorrect(taskAnswer, userAnswer) {
