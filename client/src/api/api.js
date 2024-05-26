@@ -38,3 +38,6 @@ export const getTaskItem = (id) => fetchData(`/api/taskItem/${id}`);
 export const createTaskItem = (taskItem) => fetchData(`/api/taskItem`, "POST", taskItem);
 export const updateTaskItem = (taskItem) => fetchData(`/api/taskItem`, "PUT", taskItem);
 export const deleteTaskItem = (taskItem) => fetchData(`/api/taskItem`, "DELETE", taskItem);
+
+export const getModuleProgress = (id) => fetchData(`/api/moduleProgress?id=${id}`, "GET");
+export const makeModuleProgress = (data) => fetchData(`/api/moduleProgress`, "POST", data);

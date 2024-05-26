@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ModulesContext } from "./ModulesContext";
-import { getModules, updateModule, createModule, deleteModule } from "../api/api";
+import { getModules, updateModule, createModule, deleteModule, getModuleProgress, makeModuleProgress } from "../api/api";
 
 function ModulesProvider({ children }) {
     const [moduleLoadCall, setModuleLoadCall] = useState({ state: "pending" });
@@ -28,7 +28,9 @@ function ModulesProvider({ children }) {
             handleLoad, 
             handleUpdate: (module) => handleOperation(updateModule, module),
             handleCreate: (module) => handleOperation(createModule, module),
-            handleDelete: (module) => handleOperation(deleteModule, module)
+            handleDelete: (module) => handleOperation(deleteModule, module),
+            handleGetProgress: (id) => handleOperation(getModuleProgress, id),
+            handleMakeProgress: (data) => handleOperation(makeModuleProgress, data),
         },
     };
 
