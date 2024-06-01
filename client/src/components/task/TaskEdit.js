@@ -19,6 +19,7 @@ function TaskEdit() {
     const { taskList, taskItemsList, handlerMap } = useContext(TasksContext);
     const [activeTask, setActiveTask] = useState(emptyTask);
     const [activeTaskItem, setActiveTaskItem] = useState(null);
+    const [validated, setValidated] = useState(false); 
     const { id } = useParams();
 
     const [taskItems, setTaskItems] = useState([]);
@@ -33,7 +34,14 @@ function TaskEdit() {
     };
 
     const handleSubmit = async (e) => {
+        const form = e.currentTarget;
         e.preventDefault();
+
+        if (!form.checkValidity()) { 
+            setValidated(true); 
+            return; 
+        }
+
         const handleRequest = activeTask.id ? handlerMap.handleUpdate : handlerMap.handleCreate;
         const response = await handleRequest(activeTask, taskItems);
         if (response.state === "success") {
@@ -94,23 +102,31 @@ function TaskEdit() {
                     <Card className="mb-3">
                         <Card.Header>{activeTask?.id ? 'Update' : 'Create'} task</Card.Header>
                         <Card.Body>
-                            <Form onSubmit={handleSubmit}>
+                            <Form noValidate validated={validated} onSubmit={handleSubmit}>
                                 <Form.Group controlId="taskName">
                                     <Form.Label>Name</Form.Label>
                                     <Form.Control
+                                        required
                                         type="text"
                                         value={activeTask?.name}
                                         onChange={(e) => setActiveTask({ ...activeTask, name: e.target.value })}
                                     />
+                                    <Form.Control.Feedback type="invalid"> 
+                                        Enter name of the task
+                                    </Form.Control.Feedback> 
                                 </Form.Group>
                                 <Form.Group controlId="taskDescription">
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control
+                                        required
                                         as="textarea"
                                         rows={3}
                                         value={activeTask?.description}
                                         onChange={(e) => setActiveTask({ ...activeTask, description: e.target.value })}
                                     />
+                                    <Form.Control.Feedback type="invalid"> 
+                                        Enter description of the task
+                                    </Form.Control.Feedback> 
                                 </Form.Group>
                                 <Button variant="success" type="submit">Save</Button>
                                 <Button variant="danger" className="ml-2" onClick={handleCancel}>

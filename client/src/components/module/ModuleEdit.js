@@ -25,9 +25,17 @@ function ModuleEdit() {
     const [updatedTasks, setUpdatedTasks] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [validated, setValidated] = useState(false); 
 
     const handleSubmit = async (e) => {
+        const form = e.currentTarget;
         e.preventDefault();
+
+        if (!form.checkValidity()) { 
+            setValidated(true); 
+            return; 
+        }
+
         const moduleData = {
             id: activeModule.id,
             name: activeModule.name,
@@ -100,7 +108,7 @@ function ModuleEdit() {
     return (
         <>
             <Container fluid>
-                <Form onSubmit={handleSubmit}>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <Row>
                         <Col lg={6}>
                             <Card className="mb-3">
@@ -109,21 +117,29 @@ function ModuleEdit() {
                                     <Form.Group controlId="moduleName">
                                         <Form.Label>Name</Form.Label>
                                         <Form.Control
+                                            required
                                             type="text"
                                             placeholder="Module name"
                                             value={activeModule?.name}
                                             onChange={e => setActiveModule({ ...activeModule, name: e.target.value })}
                                         />
+                                        <Form.Control.Feedback type="invalid">
+                                            Enter name of the module
+                                        </Form.Control.Feedback>
                                     </Form.Group>
                                     <Form.Group controlId="moduleDescription">
                                         <Form.Label>Description</Form.Label>
                                         <Form.Control
                                             as="textarea"
+                                            required
                                             rows={3}
                                             placeholder="Module description"
                                             value={activeModule?.description}
                                             onChange={e => setActiveModule({ ...activeModule, description: e.target.value })}
                                         />
+                                        <Form.Control.Feedback type="invalid">
+                                            Enter description of the module
+                                        </Form.Control.Feedback>
                                     </Form.Group>
                                     <Form.Group controlId="moduleImage">
                                         <Form.Label>Image</Form.Label>

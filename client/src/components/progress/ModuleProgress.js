@@ -56,7 +56,6 @@ const ModuleProgress = () => {
                 return;
             }
             
-            console.log(response);
             setTaskItems(response?.data?.taskItemList);
             setCurrentTask(response?.data?.currentTask);
         };
@@ -68,53 +67,52 @@ const ModuleProgress = () => {
         <Container fluid>
             <Row className="justify-content-center mb-4">
                 <Col lg={8}>
-                <Card className="mb-3">
-                    <Card.Header>{currentTask ? currentTask.name : 'No task in module'}</Card.Header>
-                    {taskItems?.map((task, index) => (
-                        <React.Fragment key={index}>
-                            <Card.Body>
-                                {task.contentType == 'image' && task.content && <Image src={task.content} fluid className="mb-3" />}
-                                {task.contentType == 'text' && <Card.Text>{task.content}</Card.Text>}
-                            </Card.Body>
-                            {index < taskItems?.length - 1 && <hr />}
-                        </React.Fragment>
-                    ))}
-                </Card>
+                    <Card className="mb-3">
+                        <Card.Header>{currentTask ? currentTask.name : 'No task in module'}</Card.Header>
+                        {taskItems?.map((task, index) => (
+                            <React.Fragment key={index}>
+                                <Card.Body>
+                                    {task.contentType == 'image' && task.content && <Image src={task.content} fluid className="mb-3" />}
+                                    {task.contentType == 'text' && <Card.Text>{task.content}</Card.Text>}
+                                </Card.Body>
+                                {index < taskItems?.length - 1 && <hr />}
+                            </React.Fragment>
+                        ))}
+                    </Card>
                 </Col>
             </Row>
             {taskItems?.length > 0 &&
                 <Row className="justify-content-center">
-                <Col lg={8}>
-                <Card>
-                    <Card.Body>
-                    <Form>
-                        <Form.Group as={Row} controlId="formAnswer">
-                        <Form.Label column sm={2}>
-                            Answer
-                        </Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="text"
-                                value={answer}
-                                onChange={handleAnswerChange}
-                            />
-                        </Col>
-                        <Col sm={4} className="text-right">
-                            <Button variant="success" onClick={handleSend} className="mr-2">
-                            Send
-                            </Button>
-                            <Button variant="warning" onClick={handleHint}>
-                            Hint
-                            </Button>
-                        </Col>
-                        </Form.Group>
-                    </Form>
-                    </Card.Body>
-                </Card>
-                </Col>
-            </Row>
+                    <Col lg={8}>
+                        <Card>
+                            <Card.Body>
+                                <Form>
+                                    <Form.Group as={Row} controlId="formAnswer">
+                                    <Form.Label column sm={2}>
+                                        Answer
+                                    </Form.Label>
+                                    <Col sm={6}>
+                                        <Form.Control
+                                            type="text"
+                                            value={answer}
+                                            onChange={handleAnswerChange}
+                                        />
+                                    </Col>
+                                    <Col sm={4} className="text-right">
+                                        <Button variant="success" onClick={handleSend} className="mr-2">
+                                        Send
+                                        </Button>
+                                        <Button variant="warning" onClick={handleHint}>
+                                        Hint
+                                        </Button>
+                                    </Col>
+                                    </Form.Group>
+                                </Form>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
             }
-
         </Container>
     );
 };

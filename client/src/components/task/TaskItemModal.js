@@ -5,8 +5,17 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
     const emptyItem = { name: '', type: '', contentType: 'text', content: '' }
     const [localTaskItem, setLocalTaskItem] = useState(taskItem || emptyItem);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [validated, setValidated] = useState(false); 
 
-    const handleSave = () => {
+    const handleSave = async (e) => {
+        const form = e.currentTarget;
+        e.preventDefault();
+
+        if (!form.checkValidity()) { 
+            setValidated(true); 
+            return; 
+        }
+
         saveTaskItem(localTaskItem, selectedFile);
         handleClose();
     };
@@ -22,18 +31,23 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
             </Modal.Header>
             <Modal.Body>
                 <Container>
-                    <Form>
+                    <Form noValidate validated={validated} onSubmit={handleSave}>
                         <Form.Group controlId="taskItemName">
                             <Form.Label>Name</Form.Label>
                             <Form.Control
+                                required
                                 type="text"
                                 value={localTaskItem?.name}
                                 onChange={(e) => setLocalTaskItem({ ...localTaskItem, name: e.target.value })}
                             />
+                            <Form.Control.Feedback type="invalid"> 
+                                Enter name of the task item
+                            </Form.Control.Feedback> 
                         </Form.Group>
                         <Form.Group controlId="taskItemType">
                             <Form.Label>Type</Form.Label>
                             <Form.Control
+                                required
                                 as="select"
                                 value={localTaskItem?.type}
                                 onChange={(e) => setLocalTaskItem({ ...localTaskItem, type: e.target.value })}
@@ -43,6 +57,9 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
                                 <option value={'answer'}>answer</option>
                                 <option value={'info'}>info</option>
                             </Form.Control>
+                            <Form.Control.Feedback type="invalid"> 
+                                Select a type of the task item
+                            </Form.Control.Feedback> 
                         </Form.Group>
                         <Form.Group controlId="taskItemContentType">
                             <Form.Label>Content type</Form.Label>
@@ -68,32 +85,43 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
                                     <Form.Control
                                         type="file"
                                         accept="image/*"
+                                        required={localTaskItem?.contentType === 'image'}
                                         onChange={(e) => {
                                             setSelectedFile(e.target.files[0]);
                                             setLocalTaskItem({ ...localTaskItem, content: e.target.files[0] })}
                                         }
                                     />
+                                    <Form.Control.Feedback type="invalid"> 
+                                        Add an image
+                                    </Form.Control.Feedback>
                                 </>
                             ) : (
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    value={localTaskItem?.content}
-                                    onChange={(e) => setLocalTaskItem({ ...localTaskItem, content: e.target.value })}
-                                />
+                                <>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={3}
+                                        required={localTaskItem?.contentType === 'text'}
+                                        value={localTaskItem?.content}
+                                        onChange={(e) => setLocalTaskItem({ ...localTaskItem, content: e.target.value })}
+                                    />
+                                    <Form.Control.Feedback type="invalid"> 
+                                        Select a type of the task item
+                                    </Form.Control.Feedback> 
+                                </>
                             )}
                         </Form.Group>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Cancel
+                            </Button>
+                            <Button variant="success" type="submit">
+                                Save
+                            </Button>
+                         </Modal.Footer>
                     </Form>
                 </Container>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button variant="success" onClick={handleSave}>
-                    Save
-                </Button>
-            </Modal.Footer>
+
         </Modal>
     );
 };
