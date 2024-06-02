@@ -32,7 +32,7 @@ async function getModuleProgress(req, res) {
         const taskItemList = await taskItemDAO.listTaskItems({
             taskId: currentTask.id,
             type: {
-                in: ["info", "question"],
+                in: getAllowedTaskItemTypes(currentTask),
             },
         });
 
@@ -67,7 +67,25 @@ async function getCurrentTask(module) {
             startDateTime: new Date(),
         });
     }
+    currentTask.hintUsed = scoreboard.hint;
+    currentTask.solutionUsed = scoreboard.solution;
+    currentTask.hintAvailable = (await taskItemDAO.getTaskHints(currentTask.id)).length > 0;
+    currentTask.solutionAvailable = (await taskItemDAO.getTaskSolution(currentTask.id)).length > 0;
+
     return currentTask;
+}
+
+/**
+ * Get the allowed task item types based on the current task.
+ * @param {Object} currentTask - The current task object.
+ * 
+ * @returns {Array} The allowed task item types.
+ */
+function getAllowedTaskItemTypes(currentTask) {
+    let allowedTaskItemTypes = ["info", "question"];
+    if (currentTask.hintUsed) allowedTaskItemTypes.push("hint");
+    if (currentTask.solutionUsed) allowedTaskItemTypes.push("solution");
+    return allowedTaskItemTypes;
 }
 
 module.exports = getModuleProgress;

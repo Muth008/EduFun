@@ -52,8 +52,8 @@ model Scoreboard {
   id              String   @id @default(cuid()) @map("_id")
   moduleId        String   @map("_module")
   taskId          String?  @map("_task")
-  hint            Int      @default(0)
-  solution        Int      @default(0)
+  hint            Boolean      @default(false)
+  solution        Boolean      @default(false)
   startDateTime   DateTime? 
   endDateTime     DateTime?
 }

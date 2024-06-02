@@ -37,9 +37,16 @@ async function makeModuleProgress(req, res) {
         let result = getDefaultResult();
 
         // Check if the answer is correct or if the task is an info task (no answer required)
-        if (isAnswerCorrect(taskAnswer, body.answer)) {
+        if (body.answer && isAnswerCorrect(taskAnswer, body.answer)) {
             result.success = true;
             await handleNextTask(module, scoreboard, result);
+        }
+
+        // If user requested a hint or solution, update the scoreboard
+        if (body.hint) {
+            await scoreboardDAO.updateScoreboard(scoreboard.id, { hint: true });
+        } else if (body.solution) {
+            await scoreboardDAO.updateScoreboard(scoreboard.id, { solution: true });
         }
 
         res.json(result);
@@ -61,6 +68,8 @@ async function handleNextTask(module, scoreboard, result) {
     if (nextTask) {
         await scoreboardDAO.updateScoreboard(scoreboard.id, {
             taskId: nextTask.id,
+            hint: false,
+            solution: false,
         });
     } else {
         const updatedScoreboard = await scoreboardDAO.updateScoreboard(scoreboard.id, {

@@ -63,6 +63,34 @@ class TaskItemDAO {
             handlePrismaError(error, this.type, taskItemId);
         }
     }
+
+    async getTaskHints(taskId) {
+        try {
+            const taskHints = await this.prisma.taskItem.findMany({
+                where: {
+                    taskId: taskId,
+                    type: 'hint',
+                },
+            });
+            return taskHints;
+        } catch (error) {
+            handlePrismaError(error);
+        }
+    }
+
+    async getTaskSolution(taskId) {
+        try {
+            const taskSolution = await this.prisma.taskItem.findMany({
+                where: {
+                    taskId: taskId,
+                    type: 'solution',
+                },
+            });
+            return taskSolution;
+        } catch (error) {
+            handlePrismaError(error);
+        }
+    }
 }
 
 module.exports = TaskItemDAO;
