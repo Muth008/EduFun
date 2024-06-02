@@ -6,12 +6,12 @@ import {
     Form,
     Button,
     ListGroup,
+    Spinner,
 } from "react-bootstrap";
 import { useContext, useEffect, useState } from "react";
 import { TasksContext } from "../../context/TasksContext";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskItemModal from "./TaskItemModal";
-import { Spinner } from 'react-bootstrap';
 import '../../assets/css/task/Task.css';
 
 const emptyTask = { name: "", description: "" };

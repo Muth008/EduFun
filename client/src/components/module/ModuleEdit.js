@@ -10,6 +10,7 @@ import {
     Button,
     Card,
     ListGroup,
+    Spinner,
 } from "react-bootstrap";
 import ModuleTasksModal from "./ModuleTasksModal";
 
@@ -26,6 +27,7 @@ function ModuleEdit() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [validated, setValidated] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         const form = e.currentTarget;
@@ -35,6 +37,7 @@ function ModuleEdit() {
             setValidated(true); 
             return; 
         }
+        setIsLoading(true);
 
         const moduleData = {
             id: activeModule.id,
@@ -58,6 +61,7 @@ function ModuleEdit() {
             const response = await handleRequest(moduleData);
             handleResponse(response);
         }
+        setIsLoading(false);
     };
     
     const handleResponse = (response) => {
@@ -107,6 +111,11 @@ function ModuleEdit() {
 
     return (
         <>
+            {isLoading && (
+                <div className="spinner-container">
+                    <Spinner animation="border" role="status"/>
+                </div>
+            )}
             <Container fluid>
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <Row>
