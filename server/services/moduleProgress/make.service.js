@@ -29,10 +29,7 @@ async function makeModuleProgress(req, res) {
         const scoreboard = await getCurrentScoreboard(module.id);
         handleScoreboardErrors(scoreboard, module.id);
 
-        const taskAnswer = await taskItemDAO.listTaskItems({
-            taskId: scoreboard.taskId,
-            type:  "answer",
-        });
+        const taskAnswer = await taskItemDAO.getTaskAnswer(scoreboard.taskId);
 
         let result = getDefaultResult();
 

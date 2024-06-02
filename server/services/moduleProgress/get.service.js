@@ -69,8 +69,9 @@ async function getCurrentTask(module) {
     }
     currentTask.hintUsed = scoreboard.hint;
     currentTask.solutionUsed = scoreboard.solution;
-    currentTask.hintAvailable = (await taskItemDAO.getTaskHints(currentTask.id)).length > 0;
-    currentTask.solutionAvailable = (await taskItemDAO.getTaskSolution(currentTask.id)).length > 0;
+    currentTask.hintAvailable = (await taskItemDAO.getTaskHint(currentTask.id))?.length > 0;
+    currentTask.solutionAvailable = (await taskItemDAO.getTaskSolution(currentTask.id))?.length > 0;
+    currentTask.answerExists = (await taskItemDAO.getTaskAnswer(currentTask.id))?.length > 0;
 
     return currentTask;
 }

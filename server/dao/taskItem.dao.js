@@ -11,6 +11,9 @@ class TaskItemDAO {
         try {
             const taskItems = await this.prisma.taskItem.findMany({
                 where: filter,
+                orderBy: {
+                    order: 'asc',
+                },
             });
             return taskItems;
         } catch (error) {
@@ -64,32 +67,30 @@ class TaskItemDAO {
         }
     }
 
-    async getTaskHints(taskId) {
+    async getTaskItemsByType(taskId, type) {
         try {
-            const taskHints = await this.prisma.taskItem.findMany({
+            const taskItem = await this.prisma.taskItem.findMany({
                 where: {
                     taskId: taskId,
-                    type: 'hint',
+                    type: type,
                 },
             });
-            return taskHints;
+            return taskItem;
         } catch (error) {
             handlePrismaError(error);
         }
     }
 
+    async getTaskHint(taskId) {
+       return this.getTaskItemsByType(taskId, 'hint');
+    }
+
     async getTaskSolution(taskId) {
-        try {
-            const taskSolution = await this.prisma.taskItem.findMany({
-                where: {
-                    taskId: taskId,
-                    type: 'solution',
-                },
-            });
-            return taskSolution;
-        } catch (error) {
-            handlePrismaError(error);
-        }
+        return this.getTaskItemsByType(taskId, 'solution');
+    }
+
+    async getTaskAnswer(taskId) {
+        return await this.getTaskItemsByType(taskId, 'answer');
     }
 }
 
