@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import TaskCard from "./TaskCard";
-import styles from "../../assets/css/task/TaskList.module.css";
+import "../../assets/css/layout/Layout.css";
+import "../../assets/css/task/TaskList.css";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 import { TasksContext } from "../../context/TasksContext";
@@ -12,7 +13,7 @@ function TaskList() {
     switch (taskState) {
         case "pending":
             return (
-                <div className={styles.loading}>
+                <div className="loading">
                     <Icon size={2} path={mdiLoading} spin={true} />
                 </div>
             );
@@ -23,13 +24,13 @@ function TaskList() {
                 });
             }
             return (
-                <div className={styles["task-list"]}>
+                <div className="task-list">
                     {getTaskList(taskList)}
                 </div>
             );
         case "error":
             return (
-                <div className={styles.error}>
+                <div className="error">
                     <p>Nepodařilo se načíst data</p>
                 </div>
             );

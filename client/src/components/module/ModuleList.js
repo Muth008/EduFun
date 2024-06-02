@@ -1,6 +1,7 @@
 import React from "react";
 import ModuleCard from "./ModuleCard";
-import styles from "../../assets/css/module/ModuleList.module.css";
+import "../../assets/css/module/ModuleList.css";
+import "../../assets/css/layout/Layout.css";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 import { ModulesContext } from "../../context/ModulesContext";
@@ -12,7 +13,7 @@ function ModuleList() {
     switch (moduleState) {
         case "pending":
             return (
-                <div className={styles.loading}>
+                <div className="loading">
                     <Icon size={2} path={mdiLoading} spin={true} />
                 </div>
             );
@@ -25,13 +26,13 @@ function ModuleList() {
                 });
             }
             return (
-                <div className={styles["module-list"]}>
+                <div className="module-list">
                     {getModuleList(moduleList)}
                 </div>
             );
         case "error":
             return (
-                <div className={styles.error}>
+                <div className="error">
                     <p>Nepodařilo se načíst data</p>
                 </div>
             );

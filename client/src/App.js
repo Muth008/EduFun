@@ -6,7 +6,6 @@ import Module from "./pages/Module/Module";
 import ModulesProvider from "./context/ModulesProvider";
 import TasksProvider from "./context/TasksProvider";
 import Task from "./pages/Task/Task";
-import Scoreboard from "./pages/Scoreboard/Scoreboard";
 import Progress from "./pages/Progress/Progress";
 import ModalProvider from "./context/ModalProvider";
 
@@ -23,7 +22,6 @@ function App() {
                                     <Route path="/module/:id" element={<Module />} />
                                     <Route path="/task/:id" element={<Task />} />
                                     <Route path="/progress/:id" element={<Progress />} />
-                                    <Route path="/scoreboard" element={<Scoreboard />} />
                                     <Route path="*" element={"not found"} />
                                 </Route>
                             </Routes>

@@ -11,6 +11,8 @@ import { useContext, useEffect, useState } from "react";
 import { TasksContext } from "../../context/TasksContext";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskItemModal from "./TaskItemModal";
+import { Spinner } from 'react-bootstrap';
+import '../../assets/css/task/Task.css';
 
 const emptyTask = { name: "", description: "" };
 
@@ -21,6 +23,7 @@ function TaskEdit() {
     const [activeTask, setActiveTask] = useState(emptyTask);
     const [activeTaskItem, setActiveTaskItem] = useState(null);
     const [validated, setValidated] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
     const { id } = useParams();
 
     const [taskItems, setTaskItems] = useState([]);
@@ -43,8 +46,11 @@ function TaskEdit() {
             return; 
         }
 
+        setIsLoading(true);
         const handleRequest = activeTask.id ? handlerMap.handleUpdate : handlerMap.handleCreate;
         const response = await handleRequest(activeTask, taskItems);
+        setIsLoading(false);
+
         if (response.state === "success") {
             navigate("/");
         }
@@ -97,6 +103,11 @@ function TaskEdit() {
 
     return (
         <>
+            {isLoading && (
+                <div className="spinner-container">
+                    <Spinner animation="border" role="status"/>
+                </div>
+            )}
             <Container fluid>
                 <Row>
                     <Col lg={6}>
