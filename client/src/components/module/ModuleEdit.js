@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ModulesContext } from "../../context/ModulesContext";
 import { TasksContext } from "../../context/TasksContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,13 +13,13 @@ import {
 } from "react-bootstrap";
 import ModuleTasksModal from "./ModuleTasksModal";
 
+const emptyModule = { name: "", description: "", active: false, tasks: [] };
+
 function ModuleEdit() {
     const navigate = useNavigate();
     const { moduleList, handlerMap } = useContext(ModulesContext);
     const { taskList } = useContext(TasksContext);
     const { id } = useParams();
-
-    const emptyModule = { name: "", description: "", active: false, tasks: [] };
 
     const [activeModule, setActiveModule] = useState(emptyModule);
     const [updatedTasks, setUpdatedTasks] = useState([]);
@@ -81,13 +81,13 @@ function ModuleEdit() {
         setIsModalOpen(true);
     };
 
-    const updateModuleTasks = (module) => {
+    const updateModuleTasks = useCallback((module) => {
         module.tasks = module.tasks.map((moduleTask) => {
             const task = taskList.find((task) => task.id === moduleTask.id);
             return { ...task, order: moduleTask.order };
         });
         return module;
-    };
+    }, [taskList]);
 
     useEffect(() => {
         let module = moduleList.find((module) => module.id === id);
@@ -99,7 +99,7 @@ function ModuleEdit() {
             setActiveModule(updatedModule);
             setUpdatedTasks(updatedModule.tasks);
         }
-    }, [id, moduleList, taskList]);
+    }, [id, moduleList, taskList, updateModuleTasks]);
 
     useEffect(() => {
         setActiveModule(prevModule => ({ ...prevModule, tasks: updatedTasks }));

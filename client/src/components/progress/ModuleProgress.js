@@ -1,17 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Image } from 'react-bootstrap';
 import { ModulesContext } from '../../context/ModulesContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import ModalContext from '../../context/ModalContext';
 
 const ModuleProgress = () => {
     const navigate = useNavigate();
     const { handlerMap } = useContext(ModulesContext);
+    const { showModal, hideModal } = useContext(ModalContext);
     const { id } = useParams();
 
     const [answer, setAnswer] = useState('');
     const [taskItems, setTaskItems] = useState([]);
     const [currentTask, setCurrentTask] = useState(null);
-    const [reloadData, setReloadData] = useState(false);
+    
+    const fetchData = useRef(null);
 
     const handleAnswerChange = (e) => {
         setAnswer(e.target.value);
@@ -23,45 +26,52 @@ const ModuleProgress = () => {
         setAnswer('');
 
         if (!response.data?.success) {
-            alert('Wrong answer. Try again.');
+            showModal('Wrong', 'Wrong answer, try again');
             return;
         }
 
         if (!response.data.finished) { 
-            setReloadData(!reloadData);
+            showModal('Correct', 'You have answered correctly! Keep going!')
+            fetchData.current();
         } else {
             let finishTime = response.data.finishTime.hours + 'h ' + response.data.finishTime.minutes + 'm ' + response.data.finishTime.seconds + 's';
-            alert('Congratulations! You have finished the module in ' + finishTime);
+            showModal('Finished', 'Congratulations! You have finished the module in ' + finishTime);
             navigate("/");
         }
 
     };
 
     const handleHint = () => {
+        const buttons = [
+            { text: 'No', onClick: () => hideModal(), variant: 'secondary' },
+            { text: 'Yes', onClick: () => { console.log('call for hint'); hideModal(); } }
+        ];
+      
+        showModal('Hint', 'Are you sure, you want to take an hint?', buttons);
+        
         // TODO: logic for hint
-        alert('Hint: Use the Pythagorean theorem to find the length of side c.');
     };
 
-    const handleAnswer = () => {
-        // TODO: logic for answer
-        alert('The correct answer is 5.');
+    // TODO: logic for answer
+    // const handleAnswer = () => {
+    //     
+    // };
+
+    fetchData.current = async () => {
+        let response = await handlerMap.handleGetProgress(id);
+
+        if (response.state === 'error') {
+            console.log(response.error);
+            return;
+        }
+        
+        setTaskItems(response?.data?.taskItemList);
+        setCurrentTask(response?.data?.currentTask);
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            let response = await handlerMap.handleGetProgress(id);
-
-            if (response.state === 'error') {
-                console.log(response.error);
-                return;
-            }
-            
-            setTaskItems(response?.data?.taskItemList);
-            setCurrentTask(response?.data?.currentTask);
-        };
-        fetchData();
-
-    }, [reloadData]);
+        fetchData.current();
+    }, [id]);
 
     return (
         <Container fluid>
@@ -72,8 +82,8 @@ const ModuleProgress = () => {
                         {taskItems?.map((task, index) => (
                             <React.Fragment key={index}>
                                 <Card.Body>
-                                    {task.contentType == 'image' && task.content && <Image src={task.content} fluid className="mb-3" />}
-                                    {task.contentType == 'text' && <Card.Text>{task.content}</Card.Text>}
+                                    {task.contentType === 'image' && task.content && <Image src={task.content} fluid className="mb-3" />}
+                                    {task.contentType === 'text' && <Card.Text>{task.content}</Card.Text>}
                                 </Card.Body>
                                 {index < taskItems?.length - 1 && <hr />}
                             </React.Fragment>

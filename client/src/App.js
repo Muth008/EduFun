@@ -8,24 +8,27 @@ import TasksProvider from "./context/TasksProvider";
 import Task from "./pages/Task/Task";
 import Scoreboard from "./pages/Scoreboard/Scoreboard";
 import Progress from "./pages/Progress/Progress";
+import ModalProvider from "./context/ModalProvider";
 
 function App() {
     return (
         <div className="App">
             <ModulesProvider>
                 <TasksProvider>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<Layout />}>
-                                <Route index element={<Dashboard />} />
-                                <Route path="/module/:id" element={<Module />} />
-                                <Route path="/task/:id" element={<Task />} />
-                                <Route path="/progress/:id" element={<Progress />} />
-                                <Route path="/scoreboard" element={<Scoreboard />} />
-                                <Route path="*" element={"not found"} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                    <ModalProvider>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<Layout />}>
+                                    <Route index element={<Dashboard />} />
+                                    <Route path="/module/:id" element={<Module />} />
+                                    <Route path="/task/:id" element={<Task />} />
+                                    <Route path="/progress/:id" element={<Progress />} />
+                                    <Route path="/scoreboard" element={<Scoreboard />} />
+                                    <Route path="*" element={"not found"} />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
+                    </ModalProvider>
                 </TasksProvider>
             </ModulesProvider>
         </div>

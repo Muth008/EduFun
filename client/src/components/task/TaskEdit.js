@@ -12,9 +12,10 @@ import { TasksContext } from "../../context/TasksContext";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskItemModal from "./TaskItemModal";
 
+const emptyTask = { name: "", description: "" };
+
 function TaskEdit() {
     const navigate = useNavigate();
-    const emptyTask = { name: "", description: "" };
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { taskList, taskItemsList, handlerMap } = useContext(TasksContext);
     const [activeTask, setActiveTask] = useState(emptyTask);

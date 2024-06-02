@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form, Container } from 'react-bootstrap';
 
+const emptyItem = { name: '', type: '', contentType: 'text', content: '' }
+
 const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
-    const emptyItem = { name: '', type: '', contentType: 'text', content: '' }
     const [localTaskItem, setLocalTaskItem] = useState(taskItem || emptyItem);
     const [selectedFile, setSelectedFile] = useState(null);
     const [validated, setValidated] = useState(false); 
