@@ -39,7 +39,10 @@ const ModuleProgress = () => {
 
         if (!response.data.finished) { 
             // answer is correct and module is not finished
-            showModal('Correct', 'You have answered correctly! Keep going!')
+            if (currentTask.answerExists) {
+                // if there was an answer in previous task, show confirmation
+                showModal('Correct', 'You have answered correctly! Keep going!')
+            }
             fetchData.current();
         } else {
             // answer is correct and module is finished
