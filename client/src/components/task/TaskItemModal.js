@@ -90,7 +90,7 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
                                     <Form.Control
                                         type="file"
                                         accept="image/*"
-                                        required={localTaskItem?.contentType === 'image'}
+                                        required={localTaskItem?.contentType === 'image' && !localTaskItem?.content}
                                         onChange={(e) => {
                                             setSelectedFile(e.target.files[0]);
                                             setLocalTaskItem({ ...localTaskItem, content: e.target.files[0] })}

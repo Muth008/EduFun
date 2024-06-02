@@ -91,7 +91,8 @@ function TaskEdit() {
     }
 
     const deleteTaskItem = (activeItem) => {
-        const updatedTaskItems = taskItems.filter((item) => activeItem.id ? item.id !== activeItem.id : item.name !== activeItem.name);
+        const updatedTaskItems = taskItems.filter(
+            (item) => activeItem.id ? item.id !== activeItem.id : (item.name !== activeItem.name || item.order !== activeItem.order));
         updatedTaskItems.forEach((item, index) => { item.order = index + 1; });
         setTaskItems(updatedTaskItems);
     };
