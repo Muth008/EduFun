@@ -34,7 +34,7 @@ async function makeModuleProgress(req, res) {
         let result = getDefaultResult();
 
         // Check if the answer is correct or if the task is an info task (no answer required)
-        if (body.answer && isAnswerCorrect(taskAnswer, body.answer)) {
+        if (body.answer !== undefined && isAnswerCorrect(taskAnswer, body.answer)) {
             result.success = true;
             await handleNextTask(module, scoreboard, result);
         }
