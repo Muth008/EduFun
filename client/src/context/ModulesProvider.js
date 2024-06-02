@@ -4,13 +4,16 @@ import { getModules, updateModule, createModule, deleteModule, getModuleProgress
 
 function ModulesProvider({ children }) {
     const [moduleLoadCall, setModuleLoadCall] = useState({ state: "pending" });
+    const [originalModuleList, setOriginalModuleList] = useState([]);
 
     useEffect(() => {
         handleLoad();
     }, []);
 
     async function handleLoad() {
-        getModules().then(setModuleLoadCall);
+        const modules = await getModules();
+        setModuleLoadCall(modules);
+        setOriginalModuleList(modules.data);
     }
 
     async function handleOperation(operation, module) {
@@ -20,6 +23,21 @@ function ModulesProvider({ children }) {
         }
         return res;
     }
+
+    const handleFilterChange = (filterCriteria) => {
+        const filteredModuleList = originalModuleList.filter(module => {
+            for (let key in filterCriteria) {
+                if (filterCriteria[key] && module[key]) {
+                    if (!module[key].toString().toLowerCase().includes(filterCriteria[key].toString().toLowerCase())) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
+
+        setModuleLoadCall({ ...moduleLoadCall, data: filteredModuleList });
+    };
 
     const value = {
         state: moduleLoadCall.state,
@@ -31,6 +49,7 @@ function ModulesProvider({ children }) {
             handleDelete: (module) => handleOperation(deleteModule, module),
             handleGetProgress: (id) => handleOperation(getModuleProgress, id),
             handleMakeProgress: (data) => handleOperation(makeModuleProgress, data),
+            handleFilterChange,
         },
     };
 

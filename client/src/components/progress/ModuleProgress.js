@@ -134,7 +134,8 @@ const ModuleProgress = () => {
                                                         Hint
                                                     </Button>
                                                 }
-                                                {currentTask.solutionAvailable && !currentTask.solutionUsed &&
+                                                {currentTask.solutionAvailable && !currentTask.solutionUsed && 
+                                                    (!currentTask.hintAvailable || currentTask.hintUsed) &&
                                                     <Button variant="warning" onClick={handleSolution}>
                                                         Solution
                                                     </Button>

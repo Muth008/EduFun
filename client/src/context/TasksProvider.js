@@ -5,15 +5,33 @@ import { createTask, deleteTask, getTasks, updateTask, getTasksItems, createTask
 function TasksProvider({ children }) {
     const [taskLoadCall, setTaskLoadCall] = useState({ state: "pending" });
     const [taskItemLoadCall, setTaskItemLoadCall] = useState({ state: "pending" });
+    const [originalTaskList, setOriginalTaskList] = useState([]);
 
     useEffect(() => {
         handleLoad();
     }, []);
 
     async function handleLoad() {
-        getTasks().then(setTaskLoadCall);
+        const tasks = await getTasks();
+        setTaskLoadCall(tasks);
+        setOriginalTaskList(tasks.data);
         getTasksItems().then(setTaskItemLoadCall);
     }
+
+    const handleFilterChange = (filterCriteria) => {
+        const filtereTaskList = originalTaskList.filter(task => {
+            for (let key in filterCriteria) {
+                if (filterCriteria[key] && task[key]) {
+                    if (!task[key].toString().toLowerCase().includes(filterCriteria[key].toString().toLowerCase())) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
+
+        setTaskLoadCall({ ...taskLoadCall, data: filtereTaskList });
+    };
 
     async function handleOperation(operation, task, taskItems) {
         const res = await operation(task);
@@ -56,7 +74,8 @@ function TasksProvider({ children }) {
             handleLoad, 
             handleUpdate: (task, taskItems) => handleOperation(updateTask, task, taskItems),
             handleCreate: (task, taskItems) => handleOperation(createTask, task, taskItems),
-            handleDelete: (task, taskItems) => handleOperation(deleteTask, task, taskItems)
+            handleDelete: (task, taskItems) => handleOperation(deleteTask, task, taskItems),
+            handleFilterChange
         },
     };
 
