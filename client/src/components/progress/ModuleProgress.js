@@ -25,20 +25,24 @@ const ModuleProgress = () => {
     };
 
     const handleSend = async () => {
-        if (!answer) return;
+        if (!answer && currentTask.answerExists) return;
 
+        // Send answer to server
         const response = await handlerMap.handleMakeProgress({ id: id, answer: answer });
         setAnswer('');
 
+        // answer is wrong
         if (!response.data?.success) {
             showModal('Wrong', 'Wrong answer, try again');
             return;
         }
 
         if (!response.data.finished) { 
+            // answer is correct and module is not finished
             showModal('Correct', 'You have answered correctly! Keep going!')
             fetchData.current();
         } else {
+            // answer is correct and module is finished
             let finishTime = response.data.finishTime.hours + 'h ' + response.data.finishTime.minutes + 'm ' + response.data.finishTime.seconds + 's';
             showModal('Finished', 'Congratulations! You have finished the module in ' + finishTime);
             navigate("/");
@@ -46,6 +50,7 @@ const ModuleProgress = () => {
 
     };
 
+    // helper functions for handling hint and solution (assign buttons and text to modal)
     const handleHelp = (type, title) => {
         const buttons = [
             { text: 'No', onClick: hideModal, variant: 'secondary' },
@@ -115,32 +120,37 @@ const ModuleProgress = () => {
                                     <Card.Body>
                                         <Form>
                                             <Form.Group as={Row} controlId="formAnswer">
-                                            <Form.Label column sm={2}>
-                                                Answer
-                                            </Form.Label>
-                                            <Col sm={6}>
-                                                <Form.Control
-                                                    type="text"
-                                                    value={answer}
-                                                    onChange={handleAnswerChange}
-                                                />
-                                            </Col>
-                                            <Col sm={4} className="text-right">
-                                                <Button variant="success" onClick={handleSend} className="mr-2">
-                                                    Send
-                                                </Button>
-                                                {currentTask.hintAvailable && !currentTask.hintUsed &&
-                                                    <Button variant="info" onClick={handleHint}>
-                                                        Hint
-                                                    </Button>
+                                                {currentTask.answerExists &&
+                                                    <>
+                                                        <Form.Label column sm={2}>
+                                                            Answer
+                                                        </Form.Label>
+                                                        <Col sm={6}>
+                                                            <Form.Control
+                                                                type="text"
+                                                                value={answer}
+                                                                onChange={handleAnswerChange}
+                                                            />
+                                                        </Col>
+                                                    </>
                                                 }
-                                                {currentTask.solutionAvailable && !currentTask.solutionUsed && 
-                                                    (!currentTask.hintAvailable || currentTask.hintUsed) &&
-                                                    <Button variant="warning" onClick={handleSolution}>
-                                                        Solution
+                                                <Col sm={4} className="text-right">
+                                                    <Button variant="success" onClick={handleSend} className="mr-2">
+                                                        {currentTask.answerExists ? 'Send' : 'Confirm'}
                                                     </Button>
-                                                }
-                                            </Col>
+                                                    {currentTask.hintAvailable && !currentTask.hintUsed &&
+                                                        <Button variant="info" onClick={handleHint}>
+                                                            Hint
+                                                        </Button>
+                                                    }
+                                                    {/* Show solution after hint was displayed or there is no hint */}
+                                                    {currentTask.solutionAvailable && !currentTask.solutionUsed && 
+                                                        (!currentTask.hintAvailable || currentTask.hintUsed) &&
+                                                        <Button variant="warning" onClick={handleSolution}>
+                                                            Solution
+                                                        </Button>
+                                                    }
+                                                </Col>
                                             </Form.Group>
                                         </Form>
                                     </Card.Body>

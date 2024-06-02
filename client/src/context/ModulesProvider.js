@@ -4,7 +4,7 @@ import { getModules, updateModule, createModule, deleteModule, getModuleProgress
 
 function ModulesProvider({ children }) {
     const [moduleLoadCall, setModuleLoadCall] = useState({ state: "pending" });
-    const [originalModuleList, setOriginalModuleList] = useState([]);
+    const [originalModuleList, setOriginalModuleList] = useState([]); // Used for filtering
 
     useEffect(() => {
         handleLoad();
@@ -24,6 +24,7 @@ function ModulesProvider({ children }) {
         return res;
     }
 
+    // Filter modules based on filterCriteria
     const handleFilterChange = (filterCriteria) => {
         const filteredModuleList = originalModuleList.filter(module => {
             for (let key in filterCriteria) {

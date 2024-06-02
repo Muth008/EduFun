@@ -5,7 +5,7 @@ import { createTask, deleteTask, getTasks, updateTask, getTasksItems, createTask
 function TasksProvider({ children }) {
     const [taskLoadCall, setTaskLoadCall] = useState({ state: "pending" });
     const [taskItemLoadCall, setTaskItemLoadCall] = useState({ state: "pending" });
-    const [originalTaskList, setOriginalTaskList] = useState([]);
+    const [originalTaskList, setOriginalTaskList] = useState([]); // Used for filtering
 
     useEffect(() => {
         handleLoad();
@@ -15,9 +15,13 @@ function TasksProvider({ children }) {
         const tasks = await getTasks();
         setTaskLoadCall(tasks);
         setOriginalTaskList(tasks.data);
-        getTasksItems().then(setTaskItemLoadCall);
+        getTasksItems().then(async (taskItems) => {
+            await taskItems.data.sort((a, b) => a.order - b.order);
+            setTaskItemLoadCall(taskItems)
+        });
     }
 
+    // Filter tasks based on filterCriteria
     const handleFilterChange = (filterCriteria) => {
         const filtereTaskList = originalTaskList.filter(task => {
             for (let key in filterCriteria) {
@@ -37,6 +41,7 @@ function TasksProvider({ children }) {
         const res = await operation(task);
         if (res.state !== "success") return res;
     
+        // Create or update task items
         if (taskItems?.length > 0) {
             const promises = taskItems.map(taskItem => {
                 taskItem.taskId = res.data.id;

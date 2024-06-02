@@ -50,6 +50,7 @@ function ModuleEdit() {
         const handleRequest = moduleData.id ? handlerMap.handleUpdate : handlerMap.handleCreate;
     
         if (selectedFile) {
+            // save file content as base64 string to moduleData.image
             const reader = new FileReader();
             reader.onloadend = async () => {
                 moduleData.image = reader.result;
@@ -85,6 +86,7 @@ function ModuleEdit() {
         setIsModalOpen(true);
     };
 
+    // update tasks in module with tasks from taskList
     const updateModuleTasks = useCallback((module) => {
         module.tasks = module.tasks.map((moduleTask) => {
             const task = taskList.find((task) => task.id === moduleTask.id);
@@ -96,15 +98,18 @@ function ModuleEdit() {
     useEffect(() => {
         let module = moduleList.find((module) => module.id === id);
         if (!module) {
+            // create new module
             setActiveModule(emptyModule);
             setUpdatedTasks([]);
         } else {
+            // update existing module
             let updatedModule = updateModuleTasks(module);
             setActiveModule(updatedModule);
             setUpdatedTasks(updatedModule.tasks);
         }
     }, [id, moduleList, taskList, updateModuleTasks]);
 
+    // update tasks in activeModule when updatedTasks change
     useEffect(() => {
         setActiveModule(prevModule => ({ ...prevModule, tasks: updatedTasks }));
     }, [updatedTasks]);

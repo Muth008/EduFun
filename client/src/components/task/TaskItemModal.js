@@ -24,6 +24,7 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
 
     useEffect(() => {
         setLocalTaskItem(taskItem || emptyItem);
+        setSelectedFile(null);
     }, [show, taskItem]);
 
     return (
@@ -77,6 +78,7 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
                         </Form.Group>
                         <Form.Group controlId="taskItemContent">
                             <Form.Label>Content</Form.Label>
+                            {/* Display image preview and file input if content type is an image */}
                             {(localTaskItem?.contentType === 'image') ? (
                                 <>
                                     {localTaskItem.content && typeof localTaskItem.content == 'string'  && (

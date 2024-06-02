@@ -22,11 +22,8 @@ function HeaderPanel(props) {
         } else if (props.type === 'module') {
             handleModuleFilterChange(filterCriteria);
         }
-        if (Object.keys(filterCriteria).length > 0) {
-            setFiltered(true);
-        } else {
-            setFiltered(false);
-        }
+        // check if any filter criteria is set
+        setFiltered(Object.keys(filterCriteria).length > 0);
     };
 
     const handleFilterClear = () => {

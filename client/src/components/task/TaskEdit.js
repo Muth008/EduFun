@@ -24,10 +24,10 @@ function TaskEdit() {
     const [activeTaskItem, setActiveTaskItem] = useState(null);
     const [validated, setValidated] = useState(false); 
     const [isLoading, setIsLoading] = useState(false);
+    const [taskItems, setTaskItems] = useState([]);
     const { id } = useParams();
 
-    const [taskItems, setTaskItems] = useState([]);
-
+    // open modal to add task item
     const handleAddTaskItem = () => {
         setActiveTaskItem(null);
         setIsModalOpen(true);
@@ -59,6 +59,7 @@ function TaskEdit() {
     const saveTaskItem = (item, selectedFile) => {
         return new Promise((resolve, reject) => {
             if (selectedFile) {
+                // save file content as base64 string to item.content
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     item.content = reader.result;
@@ -74,6 +75,7 @@ function TaskEdit() {
     
     const saveTaskItemHelper = (item) => {
         if (item.id) {
+            // replace existing task item in taskItems with updated task item
             const updatedTaskItems = taskItems.map((taskItem) => {
                 if (taskItem.id === item.id) {
                     return item;
@@ -82,6 +84,7 @@ function TaskEdit() {
             });
             setTaskItems(updatedTaskItems);
         } else {
+            // add new task item to taskItems
             const newTaskItem = { ...item, taskId: id, order: taskItems.length + 1 };
             setTaskItems([...taskItems, newTaskItem]);
         }

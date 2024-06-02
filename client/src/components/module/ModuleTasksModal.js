@@ -14,19 +14,21 @@ const ItemTypes = {
 const HTML5toTouch = {
     backends: [
         {
-        id: 'html5',
-        backend: HTML5Backend,
-        transition: HTML5DragTransition
+            id: 'html5',
+            backend: HTML5Backend,
+            transition: HTML5DragTransition
         },
         {
-        id: 'touch',
-        backend: TouchBackend,
-        options: { enableMouseEvents: true },
-        transition: TouchTransition
+            id: 'touch',
+            backend: TouchBackend,
+            options: { enableMouseEvents: true },
+            transition: TouchTransition
         }
     ]
 };
 
+// draggable task component
+// listType: new, used, selected
 const Task = ({ task, listType, index, moveTask }) => {
     const [{ isDragging }, drag] = useDrag({
         type: ItemTypes.TASK,
@@ -36,6 +38,7 @@ const Task = ({ task, listType, index, moveTask }) => {
         })
     });
 
+    // drop task to new position
     const [, drop] = useDrop({
         accept: ItemTypes.TASK,
         hover: (item, monitor) => {
@@ -63,7 +66,10 @@ const Task = ({ task, listType, index, moveTask }) => {
     );
 };
 
+// draggable task list component
+// listType: new, used, selected
 const TaskList = ({ tasks, listType, moveTask }) => {
+    // drop task to new list
     const [, drop] = useDrop({
         accept: ItemTypes.TASK,
         hover: (item, monitor) => {
@@ -97,6 +103,7 @@ const ModuleTasksModal = ({ show, handleClose, tasks, setTasks }) => {
     const [availableTasks, setAvailableTasks] = useState({ new: [], used: [] });
     const [selectedTasks, setSelectedTasks] = useState([]);
 
+    // drag and drop task between lists and between indexes (order)
     const moveTask = (fromListType, toListType, fromIndex, toIndex) => {
         const fromList = fromListType === 'selected' ? selectedTasks : availableTasks[fromListType];
         const toList = toListType === 'selected' ? selectedTasks : availableTasks[toListType];
@@ -120,7 +127,7 @@ const ModuleTasksModal = ({ show, handleClose, tasks, setTasks }) => {
         setSelectedTasks([...tasks]);
         setAvailableTasks({
             new: [...taskList.filter(task => !tasks.some(selectedTask => selectedTask.id === task.id))],
-            used: []
+            used: [] // not implemented yet
         });
     }, [tasks, taskList]);
 
@@ -135,7 +142,8 @@ const ModuleTasksModal = ({ show, handleClose, tasks, setTasks }) => {
                     <Row>
                     <Col lg={6}>
                         <TaskList tasks={availableTasks.new} listType="new" moveTask={moveTask} />
-                        <TaskList tasks={availableTasks.used} listType="used" moveTask={moveTask} className="mt-3" />
+                        {/* Not implemented yet */}
+                        <TaskList tasks={availableTasks.used} listType="used" moveTask={moveTask} className="mt-3" /> 
                     </Col>
                     <Col lg={6}>
                         <TaskList tasks={selectedTasks} listType="selected" moveTask={moveTask} />
