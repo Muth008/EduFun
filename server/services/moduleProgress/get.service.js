@@ -60,7 +60,7 @@ async function getCurrentTask(module) {
     if (scoreboard) {
         currentTask = await taskDAO.getTask(scoreboard.taskId);
     } else {
-        currentTask = module.tasks[0];
+        currentTask = await taskDAO.getTask(module.tasks[0].id);
         scoreboard = await scoreboardDAO.createScoreboard({
             moduleId: module.id,
             taskId: currentTask.id,
