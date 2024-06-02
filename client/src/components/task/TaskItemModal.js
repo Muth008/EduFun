@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form, Container } from 'react-bootstrap';
+import { taskItemContentTypes, taskItemTypes } from '../../data/constants';
 
 const emptyItem = { name: '', type: '', contentType: 'text', content: '' }
 
@@ -54,9 +55,9 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
                                 onChange={(e) => setLocalTaskItem({ ...localTaskItem, type: e.target.value })}
                             >
                                 <option value='' disabled>*Select a type*</option>
-                                <option value={'question'}>question</option>
-                                <option value={'answer'}>answer</option>
-                                <option value={'info'}>info</option>
+                                {taskItemTypes.map((type, index) => (
+                                    <option key={index} value={type}>{type}</option>
+                                ))}
                             </Form.Control>
                             <Form.Control.Feedback type="invalid"> 
                                 Select a type of the task item
@@ -69,8 +70,9 @@ const TaskItemModal = ({ show, handleClose, taskItem, saveTaskItem }) => {
                                 value={localTaskItem?.contentType}
                                 onChange={(e) => setLocalTaskItem({ ...localTaskItem, contentType: e.target.value })}
                             >
-                                <option>text</option>
-                                <option>image</option>
+                                {taskItemContentTypes.map((type, index) => (
+                                    <option key={index} value={type}>{type}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="taskItemContent">

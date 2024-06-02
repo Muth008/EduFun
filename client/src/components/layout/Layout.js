@@ -3,7 +3,7 @@ import NavBar from "../navBar/NavBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "../footer/Footer";
 import "../../assets/css/layout/Layout.css";
-import InfoPopup from "../infoModal/InfoModal";
+import InfoModal from "../infoModal/InfoModal";
 import ModalContext from "../../context/ModalContext";
 import { useContext } from "react";
 
@@ -21,7 +21,7 @@ function Layout() {
             <div className="sticky-footer">
                 <Footer />
             </div>
-            <InfoPopup show={modal.show} handleClose={hideModal} title={modal.title} message={modal.message} buttons={modal.buttons}/>
+            <InfoModal show={modal.show} handleClose={hideModal} title={modal.title} message={modal.message} buttons={modal.buttons}/>
         </>
     );
 }

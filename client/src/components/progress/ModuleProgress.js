@@ -22,7 +22,8 @@ const ModuleProgress = () => {
 
     const handleSend = async () => {
         if (!answer) return;
-        let response = await handlerMap.handleMakeProgress({ id: id, answer: answer });
+
+        const response = await handlerMap.handleMakeProgress({ id: id, answer: answer });
         setAnswer('');
 
         if (!response.data?.success) {
@@ -41,21 +42,23 @@ const ModuleProgress = () => {
 
     };
 
-    const handleHint = () => {
+    const handleHelp = (type, title) => {
         const buttons = [
-            { text: 'No', onClick: () => hideModal(), variant: 'secondary' },
-            { text: 'Yes', onClick: () => { console.log('call for hint'); hideModal(); } }
+            { text: 'No', onClick: hideModal, variant: 'secondary' },
+            { text: 'Yes', onClick: async () => { 
+                await handlerMap.handleMakeProgress({ id, [type]: true });
+                fetchData.current();
+                hideModal(); 
+                setTimeout(() => {
+                    window.scrollTo(0,document.body.scrollHeight);
+                }, 500);
+            }}
         ];
-      
-        showModal('Hint', 'Are you sure, you want to take an hint?', buttons);
-        
-        // TODO: logic for hint
+        showModal(title, `Are you sure, you want to take a ${type}?`, buttons);
     };
 
-    // TODO: logic for answer
-    // const handleAnswer = () => {
-    //     
-    // };
+    const handleHint = () => handleHelp('hint', 'Hint');
+    const handleSolution = () => handleHelp('solution', 'Solution');
 
     fetchData.current = async () => {
         let response = await handlerMap.handleGetProgress(id);
@@ -81,7 +84,7 @@ const ModuleProgress = () => {
                         <Card.Header>{currentTask ? currentTask.name : 'No task in module'}</Card.Header>
                         {taskItems?.map((task, index) => (
                             <React.Fragment key={index}>
-                                <Card.Body>
+                                <Card.Body className={task.type === 'hint' ? 'bg-info' : task.type === 'solution' ? 'bg-warning' : ''}>
                                     {task.contentType === 'image' && task.content && <Image src={task.content} fluid className="mb-3" />}
                                     {task.contentType === 'text' && <Card.Text>{task.content}</Card.Text>}
                                 </Card.Body>
@@ -110,11 +113,18 @@ const ModuleProgress = () => {
                                     </Col>
                                     <Col sm={4} className="text-right">
                                         <Button variant="success" onClick={handleSend} className="mr-2">
-                                        Send
+                                            Send
                                         </Button>
-                                        <Button variant="warning" onClick={handleHint}>
-                                        Hint
-                                        </Button>
+                                        {currentTask.hintAvailable && !currentTask.hintUsed &&
+                                            <Button variant="info" onClick={handleHint}>
+                                                Hint
+                                            </Button>
+                                        }
+                                        {currentTask.solutionAvailable && !currentTask.solutionUsed &&
+                                            <Button variant="warning" onClick={handleSolution}>
+                                                Solution
+                                            </Button>
+                                        }
                                     </Col>
                                     </Form.Group>
                                 </Form>
