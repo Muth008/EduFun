@@ -64,3 +64,23 @@ model Review {
   rating        Int
   comment       String?
 }
+
+model Role {
+  id        String    @id @default(cuid()) @map("_id")
+  name      String    @unique
+  admin     Boolean   @default(false)
+  users     User[]
+}
+
+model User {
+  id        String     @id @default(cuid()) @map("_id")
+  createdAt DateTime  @default(now())
+  email     String    @unique
+  firstName String?
+  lastName  String?
+  password  String   @unique
+  roleId    String
+  Role      Role      @relation(fields: [roleId], references: [id])
+  resetPass String?  @unique
+  resetExp  Int? 
+}
