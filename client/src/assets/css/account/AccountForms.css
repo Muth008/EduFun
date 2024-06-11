@@ -1,0 +1,22 @@
+.account-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.account-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.account-form h3 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.account-form .btn {
+    width: 100%;
+}

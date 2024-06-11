@@ -1,4 +1,4 @@
-const fetchData = async (url, method = "GET", body = null) => {
+const fetchData = async (url, method = "GET", body = null, token = null) => {
     try {
         const options = { method };
         if (body) {
@@ -9,12 +9,15 @@ const fetchData = async (url, method = "GET", body = null) => {
                 options.body = JSON.stringify(body);
             }
         }
+        if (token) {
+            options.headers = { ...options.headers, 'Authorization': `Bearer ${token}` };
+        }
         const response = await fetch(url, options);
         const data = await response.json();
         if (response.status >= 400) {
-            return { state: "error", error: data };
+            return { state: "error", error: data, status: response.status};
         } else {
-            return { state: "success", data };
+            return { state: "success", data, status: response.status};
         }
     } catch (error) {
         return { state: "error", error };
@@ -41,3 +44,10 @@ export const deleteTaskItem = (taskItem) => fetchData(`/api/taskItem`, "DELETE",
 
 export const getModuleProgress = (id) => fetchData(`/api/moduleProgress?id=${id}`, "GET");
 export const makeModuleProgress = (data) => fetchData(`/api/moduleProgress`, "POST", data);
+
+export const loginUser = (data) => fetchData(`/api/auth/login`, "POST", data);
+export const logoutUser = () => fetchData(`/api/auth/logout`);
+export const registerUser = (data) => fetchData(`/api/auth/register`, "POST", data);
+export const getUser = (token) => fetchData(`/api/auth/user`, "GET", null, token);
+
+export const getProtected = () => fetchData(`/api/auth/protected`);

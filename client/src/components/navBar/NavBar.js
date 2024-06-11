@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { mdiAccount } from '@mdi/js';
+import Icon from '@mdi/react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -13,6 +15,10 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav" className="navbar-collapse">
           <Nav>
             <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
+            <Nav.Link as={Link} to="/scoreboard">Scoreboard</Nav.Link>
+            <Nav.Link as={Link} to="/account">
+              <Icon path={mdiAccount} size={1} />
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
