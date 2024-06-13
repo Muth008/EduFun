@@ -5,6 +5,8 @@ import {
     loginUser,
     logoutUser,
     registerUser,
+    forgotUserPassword,
+    resetUserPassword,
     getProtected,
 } from "../api/api";
 
@@ -31,6 +33,14 @@ const UserProvider = ({ children }) => {
         storeUser(null);
     };
 
+    const forgotPassword = async (email) => {
+        return forgotUserPassword(email);
+    };
+
+    const resetPassword = async (hash, password) => {
+        return resetUserPassword({hash, password});
+    }
+
     const register = async (userData) => {
         const response = await registerUser(userData);
         console.log("register", response);
@@ -54,7 +64,7 @@ const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ token, user, login, logout, register }}>
+        <UserContext.Provider value={{ token, user, login, logout, register, forgotPassword, resetPassword }}>
             {children}
         </UserContext.Provider>
     );

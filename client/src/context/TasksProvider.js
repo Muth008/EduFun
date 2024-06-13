@@ -16,7 +16,7 @@ function TasksProvider({ children }) {
         setTaskLoadCall(tasks);
         setOriginalTaskList(tasks.data);
         getTasksItems().then(async (taskItems) => {
-            await taskItems.data.sort((a, b) => a.order - b.order);
+            await taskItems.data?.sort((a, b) => a.order - b.order);
             setTaskItemLoadCall(taskItems)
         });
     }

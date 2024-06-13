@@ -49,5 +49,7 @@ export const loginUser = (data) => fetchData(`/api/auth/login`, "POST", data);
 export const logoutUser = () => fetchData(`/api/auth/logout`);
 export const registerUser = (data) => fetchData(`/api/auth/register`, "POST", data);
 export const getUser = (token) => fetchData(`/api/auth/user`, "GET", null, token);
+export const forgotUserPassword = (email) => fetchData(`/api/auth/forgotPassword`, "POST", { email });
+export const resetUserPassword = (data) => fetchData(`/api/auth/resetPassword`, "POST", data);
 
 export const getProtected = () => fetchData(`/api/auth/protected`);

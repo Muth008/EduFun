@@ -33,7 +33,7 @@ function ModuleList() {
         case "error":
             return (
                 <div className="error">
-                    <p>Nepodařilo se načíst data</p>
+                    <p>Data could not be loaded</p>
                 </div>
             );
         default:

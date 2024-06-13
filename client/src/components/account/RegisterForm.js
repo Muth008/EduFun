@@ -1,16 +1,18 @@
 import React, { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 import "../../assets/css/account/AccountForms.css";
 
-function RegisterForm({ showLoginForm }) {
+function RegisterForm() {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [password, setPassword] = useState("");
     const [passwordCheck, setPasswordCheck] = useState("");
-
-    const { user, register } = useContext(UserContext);
+    
+    const { register } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -77,7 +79,7 @@ function RegisterForm({ showLoginForm }) {
                 </Button>
                 <div className="d-flex justify-content-between align-items-center mt-3">
                     <div className="login">
-                        <a href="#" onClick={showLoginForm}>Login</a>
+                        <a href="#" onClick={() => navigate('/account/login')}>Login</a>
                     </div>
                 </div>
             </Form>

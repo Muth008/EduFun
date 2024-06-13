@@ -27,7 +27,7 @@ function App() {
                                         <Route path="/task/:id" element={<Task />} />
                                         <Route path="/progress/:id" element={<Progress />} />
                                         <Route path="/scoreboard" element={<Scoreboard />} />
-                                        <Route path="Account" element={<Account/>} />
+                                        <Route path="/account/:action?" element={<Account/>} />
                                         <Route path="*" element={"not found"} />
                                     </Route>
                                 </Routes>
