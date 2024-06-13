@@ -39,7 +39,7 @@ async function forgotPassword(req, res) {
                 subject: 'Password Reset',
                 html: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
                        Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n
-                       <p>Click <a href="${process.env.SERVER_HOST}:${process.env.SERVER_PORT}${process.env.RESET_PASS_PATH}?hash=${resetPass}">here</a> to reset your password.</p>\n\n
+                       <p>Click <a href="${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}${process.env.RESET_PASS_PATH}?hash=${resetPass}">here</a> to reset your password.</p>\n\n
                        If you did not request this, please ignore this email and your password will remain unchanged.\n`
             };
             const mailResponse = await sendMail(message);
