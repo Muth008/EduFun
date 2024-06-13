@@ -3,6 +3,8 @@ const { expressjwt } = require("express-jwt");
 const login = require("../services/auth/login.service");
 const getUser = require("../services/auth/getUser.service");
 const register = require("../services/auth/register.service");
+const forgotPassword = require("../services/auth/forgotPassword.service");
+const resetPassword = require("../services/auth/resetPassword.service");
 
 const router = express.Router();
 
@@ -21,6 +23,14 @@ router.get("/user", expressjwt(jwtSettings), async (req, res) => {
 
 router.post("/register", async (req, res) => {
     await register(req, res);
+});
+
+router.post("/forgotPassword", async (req, res) => {
+    await forgotPassword(req, res);
+});
+
+router.post("/resetPassword", async (req, res) => {
+    await resetPassword(req, res);
 });
 
 module.exports = router;

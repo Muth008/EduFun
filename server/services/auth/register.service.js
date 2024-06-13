@@ -1,6 +1,5 @@
 const registerSchema = require("../../schema/auth/register.schema");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const { ajv, handleValidationError } = require("../../utils/ajv.util");
 const { getPublicUserData, getToken } = require("../../utils/auth.util");
 const { PrismaClient } = require("@prisma/client");

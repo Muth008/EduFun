@@ -79,6 +79,17 @@ class UserDAO {
             handlePrismaError(error, this.type, email);
         }
     }
+
+    async getUserByResetPass(resetPass) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: { resetPass: resetPass },
+            });
+            return user;
+        } catch (error) {
+            handlePrismaError(error, this.type, resetPass);
+        }
+    }
 }
 
 module.exports = UserDAO;

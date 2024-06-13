@@ -31,6 +31,6 @@ app.use((err, req, res, next) => {
     res.status(500).send({ status: 500, message: 'An unexpected error occurred'});
 });
 
-app.listen(process.env.PORT, () =>
-    console.log(`App running on port ${process.env.PORT}`)
+app.listen(process.env.SERVER_PORT, () =>
+    console.log(`App running on port ${process.env.SERVER_PORT}`)
 )
